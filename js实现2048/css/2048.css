@@ -19,6 +19,7 @@
     font-size: 30px;
     background: #f2b179;
     color: #FFFFFF;
+    cursor: pointer;
 }
 #div2048 div.tile
 {
