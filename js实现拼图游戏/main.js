@@ -1,7 +1,6 @@
 // 获取需要的元素
 const start = document.querySelector('.start');
 const restart = document.querySelector('.restart');
-const pause = document.querySelector('.pause');
 const p = document.querySelector('p');
 const main = document.querySelector('.main');
 
@@ -50,26 +49,35 @@ class Puzzle{
     obj2.style.backgroundColor = '#ffe272';
   }
 
-  move(){
-    const index = parseInt(this.getAttribute('index'));
+  move(obj){
+    const index = parseInt(obj.getAttribute('index'));
      for(let i = 0; i < main.children.length; i++){
        if(main.children[i].innerHTML === ''){
          const num = parseInt(main.children[i].getAttribute('index'));
          if(num-3 === index){
-          //  这里this的指向改变，无法使用构造函数的this，这个写法很不合适.
-          game.change(main.children[i],this);
+          this.change(main.children[i],obj);
          }
          if(num+3 === index){
-          game.change(main.children[i],this);
+          this.change(main.children[i],obj);
          }
          if(num-1 === index){
-          game.change(main.children[i],this);
+          this.change(main.children[i],obj);
          }
          if(num+1 === index){
-          game.change(main.children[i],this);
+          this.change(main.children[i],obj);
          }
        }
      }
+  }
+
+  over(){
+    for(let i = 0; i < main.children.length-1; i++){
+      let x = parseInt(main.children[i].innerHTML);
+      if(x-1 !== i){
+        return false;
+      }
+    }
+    return true;
   }
 }
 
@@ -77,10 +85,14 @@ const game = new Puzzle;
 start.addEventListener('click',() => {
   start.style.display = 'none';
   restart.style.display = 'block';
-  pause.style.display = 'block';
   game.startRandom();
   game.time(p);
+  for(let i = 0; i < main.children.length; i++){
+    main.children[i].addEventListener('click',function(){
+      game.move(this);
+      if(game.over()){
+        alert('游戏结束');
+      }
+    });
+  }
 })
-for(let i = 0; i < main.children.length; i++){
-  main.children[i].addEventListener('click',game.move)
-}
