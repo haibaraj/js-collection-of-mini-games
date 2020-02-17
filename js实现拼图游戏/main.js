@@ -6,7 +6,6 @@ const main = document.querySelector('.main');
 
 class Puzzle{
   constructor(){
-  
   }
   startRandom(){
     let randomNumber;
@@ -83,6 +82,21 @@ class Puzzle{
 
 const game = new Puzzle;
 start.addEventListener('click',() => {
+  start.style.display = 'none';
+  restart.style.display = 'block';
+  game.startRandom();
+  game.time(p);
+  for(let i = 0; i < main.children.length; i++){
+    main.children[i].addEventListener('click',function(){
+      game.move(this);
+      if(game.over()){
+        alert('游戏结束');
+      }
+    });
+  }
+})
+
+restart.addEventListener('click',() => {
   start.style.display = 'none';
   restart.style.display = 'block';
   game.startRandom();
