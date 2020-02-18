@@ -28,7 +28,7 @@ class Puzzle{
   time(obj){
     let second = 0;
     let minute = 0;
-    setInterval(() => {
+    let timing = setInterval(() => {
       second++;
       if(second%60 === 0){
         second = 0;
