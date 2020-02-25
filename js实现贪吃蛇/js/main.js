@@ -1,10 +1,13 @@
 const box = document.querySelector('.snake-box');
+let ele = [];
+let arr = [];
 class snake{
   constructor(ele,arr){
     this.ele = ele;
     this.arr = arr;
   }
   init(){  
+    this.ele = [];
     for(let i = 0; i < 3; i++){
       let head = document.createElement('div');
       this.ele.push(head);
@@ -23,9 +26,7 @@ class snake{
   }
 
   // 移动动画
-  animate(dir,step,t){
-    clearInterval(ele.time);
-    ele.time = setInterval(() => {
+  animate(dir,step){
       if(dir === 'top'){
         for(let i = this.ele.length-1; i >= 1; i--){
           this.ele[i].style.left = this.ele[i-1].offsetLeft + 'px';
@@ -39,23 +40,22 @@ class snake{
         }
         this.ele[0].style.left = this.ele[0].offsetLeft + step + 'px';
       }
-    }, t);
   }
 
   // 蛇头移动
   move(e){
       switch(e){
         case 40:
-          this.animate('top',20,300);
+          this.animate('top',20);
           break;
         case 38:
-          this.animate('top',-20,300);
+          this.animate('top',-20);
           break;
         case 37:
-          this.animate('left',-20,300);
+          this.animate('left',-20);
           break;
         case 39:
-          this.animate('left',20,300);
+          this.animate('left',20);
           break;
     }
   }
@@ -77,13 +77,10 @@ class snake{
 
   isCover(){
     // 判断蛇是否吃到食物
-   
     for(let i = 0; i < this.arr.length; i++){
       if(this.ele[0].offsetLeft === this.arr[i].offsetLeft){
         if(this.ele[0].offsetTop === this.arr[i].offsetTop){
           this.ele.push(this.arr[i]);
-          this.arr.splic(i,1);
-          game.foods();
           return true;
         }  
       }
@@ -94,25 +91,41 @@ class snake{
 
   over(){
     for(let i = 0; i < this.ele.length; i++){
-      if(this.ele[i].offsetTop < 0 || this.ele[i].offsetTop > 480){
-        alert('game over');
+      if(this.ele[i].offsetTop < 0 || this.ele[i].offsetTop > 500){
+        game.init()
+        return true;
+      }
+      if(this.ele[i].offsetLeft <0 || this.ele[i].offsetLeft > 800){
+        game.init();
         return true;
       }
     }
+
+    return false;
   }
 }
   
-let ele = [];
-let arr = [];
 const game = new snake(ele,arr);
 game.init();
 game.foods();
 document.addEventListener('keydown',(e) => {
+  clearInterval(ele.time);
+  ele.time = setInterval(() => {
   game.move(e.keyCode);
+  if(game.isCover()){
+    game.foods();
+  }
+  if(game.over()){
+    alert('game over');
+    clearInterval(ele.time);
+    for(let i = box.children.length-1; i >=0; i--){
+      box.removeChild(box.children[i]);
+    }
+    game.init();
+    game.foods();
+  }
+  }, 300);
 })
-setInterval(() => {
-  game.over();
-}, 300);
 
 
 
