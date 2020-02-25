@@ -13,7 +13,7 @@
 .snake-box{
 	position: relative;
 	float: left;
-	width: 80%;
+	width:800px;
 	height: 500px;
 	background-color: #666;
 }
